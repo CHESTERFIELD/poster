@@ -5,8 +5,12 @@
 	z-index: 10;
 	margin-top: 0;
 	margin-bottom: 0;
-  position: absolute;
-	background-color: #fff3e6;
+    position: absolute;
+	background-color: #faa61a;
+}
+
+.btn {
+    background-color: #faa61a;
 }
 
 .navbar-brand {
@@ -70,4 +74,8 @@
     cursor: pointer;
     text-align: center;
     padding-top: 11px;
+}
+
+.cinema-block {
+    margin-top: 76px;
 }
