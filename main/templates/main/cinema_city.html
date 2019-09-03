@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{ block.super }} - Cinema City Page
+{% endblock %}
+
+{% block content %}
+
+    {% for item in full_info.values %}
+
+        <div class="card mb-4 border-success">
+        <h3 class="card-header">
+            {{ item.name }}
+        </h3>
+        <div class="card-body">
+            <h5 class="card-title"> {{ item.genre_time.0 }} </h5>
+            <p class="card-text">{{ item.link }}</p>
+            <a href="" class="btn btn-primary">Read</a>
+        </div>
+        </div>
+    {% endfor %}
+{% endblock %}
