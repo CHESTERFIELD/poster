@@ -3,7 +3,7 @@
 
 
 {% block title %}
-    {{ block.super }} - Cinema City Page
+    {{ block.super }} - Multiplex Page
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,11 @@
             {{ item.name }}
         </h3>
         <div class="card-body">
-            <h5 class="card-title"> {{ item.genre_time.0 }} </h5>
+            <h5 class="card-title">
+                {% for element in item.genre_time %}
+                    {{ element }}
+                {% endfor %}
+            </h5>
             <p class="card-text">{{ item.link }}</p>
             <a href="{{ item.link }}" target="_blank" class="btn btn-primary">Read</a>
         </div>
