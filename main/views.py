@@ -97,26 +97,28 @@ def get_planeta_kino_page(request):
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get(url)
     html = driver.page_source
+    driver.close()
     full_info = dict()
+    result = dict()
     count = 0
     soup = BeautifulSoup(html, "html.parser")
     for element in soup.find('app-root'):
-        result = dict()
         children = element.findChildren(recursive=True)
         for child in children:
             # name
             if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
                 name = child.string
                 count = count + 1
+                result['name'] = name
             # link
             if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
                 link = host + child.attrs['href']
+                result['link'] = link
                 genre_time = parse_genre_and_time_duration_planeta(host, link)
-
-        full_info[count] = result
-        result['genre_time'] = genre_time
-        result['name'] = name
-        result['link'] = link
+                result['genre_time'] = genre_time
+            full_info[count] = result.copy()
+    if 0 in full_info:
+        del full_info[0]
     print(full_info)
     return render(request, 'main/cinema_city.html', context={'full_info': full_info})
 
