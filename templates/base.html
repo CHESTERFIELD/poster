@@ -13,9 +13,9 @@
 	<meta name="author" content="">
 
 	<!-- JavaScript -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		  crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
 		  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
 		  crossorigin="anonymous"></script>
@@ -28,41 +28,51 @@
 		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 		  crossorigin="anonymous">
 
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lobster|Lora|Playfair+Display&display=swap" rel="stylesheet">
+
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 	<style>
 
 		body {
-			background: #fefffa;
-			padding-bottom: 3rem;
+			background-image: url(http://hq-oboi.ru/photo/svetlyy_fon_1920x1200.jpg);
+			background-position: left;
+ 			background-repeat: no-repeat;
+ 			background-attachment: fixed;
+
 		}
 
+		.container{
+			background: white;
+		}
 	</style>
 </head>
 <body>
-
+	<div class="container main">
 	<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
-		<a class="navbar-brand" href="{% url 'home_page_url' %}">
-			Brand Asdad
-		</a>
+		<a class="navbar-brand" href="{% url 'home_page_url' %}">Афиша Одессы</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 			<div class="navbar-nav">
-				<a class="nav-item nav-link active" href="{% url 'cinemas_page_url' %}">All cinema</a>
-				<a class="nav-item nav-link" href="#">Features</a>
-				<a class="nav-item nav-link" href="https://teleg.run/Mykyta_Mishchenko">Telegram</a>
+				<a class="nav-item nav-link active" href="{% url 'cinemas_page_url' %}">Кино</a>
+				<a class="nav-item nav-link active" href="{% url 'cinemas_page_url' %}">Театры</a>
+				<a class="nav-item nav-link active" href="#">Вечеринки</a>
+				<a class="nav-item nav-link active" href="https://teleg.run/Mykyta_Mishchenko">Мероприятия</a>
 			</div>
 		</div>
-  </nav>
+  	</nav>
 
 {% block content %}
 {% endblock %}
-
 <footer class="container footer">
-	<p class="arrow-top float-right"><a href="#"><img id="src" src="{% static 'media/images/arrow-top.png' %}"></a></p>
+	<a href="" class="arrow-top float-right"><img id="src" src="{% static 'media/images/arrow-top.png' %}"></a>
 	<p>&copy; Poster-2019</p>
 </footer>
+</div>
+
+<script src="{% static 'js/button.js' %}"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 	z-index: 10;
 	margin-top: 0;
 	margin-bottom: 0;
-    position: absolute;
+  position: absolute;
 	background-color: #faa61a;
 }
 
@@ -14,17 +14,20 @@
 }
 
 .navbar-brand {
-	margin-left: 5cm;
+	position: static;
+	margin-left: 100px;
 	padding: 5px 20px 5px; /* Increase vertical padding to match navbar links */
-	font-size: 18px;
-	font: 18px bold sans-serif;
+	font-size: 26px;
+	font-family: 'Playfair Display', serif;
 	text-shadow: 0 -1px 0 rgba(0,0,0,.1);
 }
 
 #navbarNavAltMarkup {
 	position: absolute;
-	margin-left:25cm;
-	font: 18px bold sans-serif;
+	margin-left: 21cm;
+	font-size: 20px;
+	color: white !important;
+	font-family: 'Lora', serif;
 }
 
 .carousel-item {
@@ -32,7 +35,7 @@
 }
 
 .carousel-inner {
-    margin-top: 0px;
+    margin-top: 65px;
 }
 
 .carousel img {
@@ -66,14 +69,24 @@
 .arrow-top {
     height: 50px;
     width: 50px;
-    border-radius: 2px;
-    background: #faa61a center no-repeat;
+    border-radius: 50%;
+    background: #faa61a;
     bottom: 30px;
-    right: 120px;
-    z-index: 100;
+    right: 60px;
+    z-index: 1000;
     cursor: pointer;
     text-align: center;
     padding-top: 11px;
+		position: fixed;
+		opacity: .5;
+		display: none;
+}
+
+.arrow-top:hover,
+.arrow-top:focus {
+	opacity: 1;
+	filter: brightness(1.2);
+	outline: none;
 }
 
 .cinema-block {
@@ -82,4 +95,30 @@
 
 #cinema-card {
     margin-top: 76px;
+}
+
+.main {
+	padding-bottom: 35px;
+}
+
+.jumbotron {
+	background-color: white !important;
+	padding: 2em !important;
+	margin-bottom: 0px !important;
+}
+
+.slides {
+	margin: 0 -15px;
+}
+
+#aftjum {
+ margin-top: 10px !important;
+}
+
+.image-home-name {
+	text-align: center;
+}
+
+.images__home img {
+	margin-bottom: 15px;
 }
