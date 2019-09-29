@@ -36,11 +36,10 @@
 	<style>
 
 		body {
-			background-image: url(http://hq-oboi.ru/photo/svetlyy_fon_1920x1200.jpg);
+			background-image: url("../../static/media/images/fon.jpg");
 			background-position: left;
  			background-repeat: no-repeat;
  			background-attachment: fixed;
-
 		}
 
 		.container{
@@ -59,14 +58,17 @@
 			<div class="navbar-nav">
 				<a class="nav-item nav-link active" href="{% url 'cinemas_page_url' %}">Кино</a>
 				<a class="nav-item nav-link active" href="{% url 'cinemas_page_url' %}">Театры</a>
-				<a class="nav-item nav-link active" href="#">Вечеринки</a>
-				<a class="nav-item nav-link active" href="https://teleg.run/Mykyta_Mishchenko">Мероприятия</a>
+				<a class="nav-item nav-link active" href="{% url 'concerts_page_url' %}">Концерты</a>
+				<a class="nav-item nav-link active" href="">Мероприятия</a>
 			</div>
 		</div>
   	</nav>
 
-{% block content %}
-{% endblock %}
+
+		{% block content %}
+		{% endblock %}
+
+
 <footer class="container footer">
 	<a href="" class="arrow-top float-right"><img id="src" src="{% static 'media/images/arrow-top.png' %}"></a>
 	<p>&copy; Poster-2019</p>

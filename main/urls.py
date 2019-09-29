@@ -8,4 +8,5 @@ urlpatterns = [
     path('cinemas/cinema_city/', get_cinema_city_page, name='cinema_city_url'),
     path('cinemas/planeta_kino/', get_planeta_kino_page, name='planeta_kino_url'),
     path('cinemas/multiplex/', get_multiplex_page, name='multiplex_url'),
+    path('concerts/', get_concerts_from_tickets_od_ua, name='concerts_page_url'),
 ]

@@ -12,13 +12,24 @@ http.client._MAXHEADERS = 1000
 
 
 def full_day():
+    """ return date in format ddmmyyyy for find DOM element"""
     dt = DateTime()
-    if dt.day() < 10:
+    if dt.day() < 10 and dt.month() < 10:
         today = "0" + str(dt.day()) + "0" + str(dt.month()) + str(dt.year())
+    elif dt.day() < 10 and dt.month() >= 10:
+        today = "0" + str(dt.day()) + str(dt.month()) + str(dt.year())
+    elif dt.day() >= 10 and dt.month() >= 10:
+        today = str(dt.day()) + str(dt.month()) + str(dt.year())
     else:
         today = str(dt.day()) + "0" + str(dt.month()) + str(dt.year())
-    print(today)
     return today
+
+
+def today_url():
+    """ return date for url on ticketsOdUa in format yyyy-mm-dd """
+    dt = DateTime()
+    today = dt.ISO().split()
+    return today[0]
 
 
 def get_home_page(request):
@@ -66,14 +77,19 @@ def get_cinema_city_page(request):
 
     return render(request, 'main/cinema_city.html', context={'full_info': full_info})
 
+
 def parse_genre_and_time_duration_planeta(host, link):
     set_dd = list()
     hdr = {'User-Agent': 'Chrome/5.0'}
     req = Request(link, headers=hdr)
     page = urlopen(req)
+
+
     # mbytes = page.read()
     # htmlstr = mbytes.decode('utf8')
     # htmlstr.replace('<dt name="duration">Тривалість</dt>','</dd>')
+
+
     soup = BeautifulSoup(page.read(), "html.parser")
     for element in soup.find_all('span'):
         element.extract()
@@ -83,6 +99,8 @@ def parse_genre_and_time_duration_planeta(host, link):
         set_dd.append(time)
     print(set_dd)
     return set_dd
+
+
     # driver = webdriver.Chrome(ChromeDriverManager().install())
     # driver.get(link)
     # html = driver.page_source
@@ -90,6 +108,7 @@ def parse_genre_and_time_duration_planeta(host, link):
     # for element in soup.find('div', class_="movie-page-block__summary"):
     #     children = element.findChildren(recursive=True)
     #     print(children)
+
 
 def get_planeta_kino_page(request):
     host = "https://planetakino.ua"
@@ -131,6 +150,7 @@ def parse_genre_and_time_duration_multiplex(host, link):
         set_genre_time.append(element.text)
     return set_genre_time
 
+
 def get_multiplex_page(request):
     host = "https://multiplex.ua"
     url = "https://multiplex.ua/cinema/odesa/gagarinn_plaza"
@@ -151,3 +171,39 @@ def get_multiplex_page(request):
 
     print(full_info)
     return render(request, 'main/multiplex.html', context={'full_info': full_info})
+
+
+def get_concerts_from_tickets_od_ua(request):
+    cost_string = 'грн.'
+    host = "https://tickets.od.ua"
+    url = "https://tickets.od.ua/?date=" + today_url()
+    hdr = {'User-Agent': 'Chrome/5.0'}
+    req = Request(url, headers=hdr)
+    page = urlopen(req)
+    soup = BeautifulSoup(page.read(), "html.parser")
+    full_info = dict()
+    count = 0
+    for item in soup.findAll("span", class_="type-icon type1"):
+        parent = item.findParent("div", class_="event-item-image")
+        result = dict()
+        count = count + 1
+        full_cost = ""
+        for item_inner in parent.find('span', class_='summary'):
+            name = item_inner.string
+        for item_inner in parent.find(text=re.compile(cost_string)):
+            cost = item_inner.split()
+            if not cost:
+                continue
+            else:
+                full_cost = full_cost + "".join(cost)
+        true_cost = " ".join(re.split('(\d+)', full_cost))
+        link = host + parent.find("a").attrs["href"]
+
+        full_info[count] = result
+        result['name'] = name
+        result['cost'] = true_cost
+        result['link'] = link
+    if bool(full_info):
+        return render(request, 'main/concerts.html', context={'full_info': full_info})
+    else:
+        return render(request, 'main/empty_page.html')

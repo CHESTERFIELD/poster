@@ -77,9 +77,9 @@
     cursor: pointer;
     text-align: center;
     padding-top: 11px;
-		position: fixed;
-		opacity: .5;
-		display: none;
+	position: fixed;
+	opacity: .5;
+	display: none;
 }
 
 .arrow-top:hover,
@@ -98,7 +98,7 @@
 }
 
 .main {
-	padding-bottom: 35px;
+	/*padding-bottom: 35px;*/
 }
 
 .jumbotron {
@@ -112,7 +112,7 @@
 }
 
 #aftjum {
- margin-top: 10px !important;
+ 	margin-top: 10px !important;
 }
 
 .image-home-name {
@@ -121,4 +121,11 @@
 
 .images__home img {
 	margin-bottom: 15px;
+}
+
+.footer {
+	height: 70px;
+}
+.empty {
+	margin-top: 65px;
 }

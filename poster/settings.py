@@ -25,8 +25,17 @@ SECRET_KEY = '$e9n1enbb@v69&ecx!48-r+e=m19_k7q-67*mki@7fyw!)#5r8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# **********************************************************************************************************************
+# Типо обработчик ошибок
+# if DEBUG is False:
+#     ALLOWED_HOSTS = [
+#         '127.0.0.1:5000',
+#         '*',
+#     ]
+#
+# if DEBUG is True:
+#     ALLOWED_HOSTS = []
+# **********************************************************************************************************************
 
 # Application definition
 
