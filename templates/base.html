@@ -36,7 +36,7 @@
 	<style>
 
 		body {
-			background-image: url("../../static/media/images/fon.jpg");
+			background-image: url("../../../static/media/images/fon.jpg");
 			background-position: left;
  			background-repeat: no-repeat;
  			background-attachment: fixed;
@@ -64,8 +64,8 @@
 				  Мероприятия
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				  <a class="dropdown-item" href="#">Шоу</a>
-				  <a class="dropdown-item" href="#">Детям</a>
+				  <a class="dropdown-item" href="{% url 'show_page_url' %}">Шоу</a>
+				  <a class="dropdown-item" href="{% url 'children_page_url' %}">Детям</a>
 				  <div class="dropdown-divider"></div>
 				  <a class="dropdown-item" href="#">В заведениях города</a>
 				</div>

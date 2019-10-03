@@ -179,16 +179,32 @@ def get_multiplex_page(request):
 def get_concerts_from_tickets_od_ua(request):
     data = "концертов"
     type = "type-icon type1"
-    return HttpResponse(get_data_from_tickets_od_ua(request, type, data))
+    template = "main/concerts.html"
+    return HttpResponse(get_data_from_tickets_od_ua(request, template, type, data))
 
 
 def get_theatre_from_tickets_od_ua(request):
     data = "спектаклей"
     type = "type-icon type2"
-    return HttpResponse(get_data_from_tickets_od_ua(request, type, data))
+    template = "main/theatre.html"
+    return HttpResponse(get_data_from_tickets_od_ua(request, template, type, data))
 
 
-def get_data_from_tickets_od_ua(request, type, data):
+def get_children_from_tickets_od_ua(request):
+    data = "сеансов"
+    type = "type-icon type4"
+    template = "main/children.html"
+    return HttpResponse(get_data_from_tickets_od_ua(request, template, type, data))
+
+
+def get_show_from_tickets_od_ua(request):
+    data = "сеансов"
+    type = "type-icon type3"
+    template = "main/show.html"
+    return HttpResponse(get_data_from_tickets_od_ua(request, template, type, data))
+
+
+def get_data_from_tickets_od_ua(request, template, type, data):
     cost_string = 'грн.'
     host = "https://tickets.od.ua"
     url = "https://tickets.od.ua/?date=" + today_url()
@@ -232,6 +248,6 @@ def get_data_from_tickets_od_ua(request, type, data):
         result['time'] = time
 
     if bool(full_info):
-        return render(request, 'main/theatre.html', context={'full_info': full_info})
+        return render(request, template, context={'full_info': full_info})
     else:
         return render(request, 'main/empty_page.html', context={'place': data})

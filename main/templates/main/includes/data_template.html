@@ -1,0 +1,12 @@
+<div class="card mb-4 border-success" id="cinema-card">
+    <h3 class="card-header">
+        {{ item.name }}
+    </h3>
+    <div class="card-body">
+        <h4 class="card-title"> {{ item.current_place }} </h4>
+        <h5 class="card-title"> {{ item.cost }} </h5>
+        <p class="card-text">{{ item.time }}</p>
+        <a href="{{ item.link }}" target="_blank" class="btn btn-primary inoneline">Cмотреть</a>
+        <a href="{{ item.link }}" target="_blank" class="btn btn-primary inoneline">Купить билеты</a>
+    </div>
+</div>

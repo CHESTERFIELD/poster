@@ -129,3 +129,8 @@
 .empty {
 	margin-top: 65px;
 }
+
+.inoneline {
+	display: inline-block;
+	margin-right: 15px;
+}
