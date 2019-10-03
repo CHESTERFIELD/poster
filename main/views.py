@@ -1,9 +1,12 @@
 import re
 import http.client
+import urllib
 
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from urllib.request import *
 from bs4 import BeautifulSoup
+from requests import HTTPError
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from DateTime import *
@@ -174,22 +177,42 @@ def get_multiplex_page(request):
 
 
 def get_concerts_from_tickets_od_ua(request):
+    data = "концертов"
+    type = "type-icon type1"
+    return HttpResponse(get_data_from_tickets_od_ua(request, type, data))
+
+
+def get_theatre_from_tickets_od_ua(request):
+    data = "спектаклей"
+    type = "type-icon type2"
+    return HttpResponse(get_data_from_tickets_od_ua(request, type, data))
+
+
+def get_data_from_tickets_od_ua(request, type, data):
     cost_string = 'грн.'
     host = "https://tickets.od.ua"
     url = "https://tickets.od.ua/?date=" + today_url()
     hdr = {'User-Agent': 'Chrome/5.0'}
     req = Request(url, headers=hdr)
-    page = urlopen(req)
+
+    try:
+        page = urlopen(req)
+    except urllib.error.HTTPError:
+        return render(request, 'main/empty_page.html', context={'place': data})
+
     soup = BeautifulSoup(page.read(), "html.parser")
     full_info = dict()
     count = 0
-    for item in soup.findAll("span", class_="type-icon type1"):
+    for item in soup.find_all("span", class_=type):
         parent = item.findParent("div", class_="event-item-image")
+        print(item)
         result = dict()
         count = count + 1
         full_cost = ""
         for item_inner in parent.find('span', class_='summary'):
             name = item_inner.string
+        for item_inner in parent.find('span', class_='place fn org location'):
+            current_place = item_inner.string
         for item_inner in parent.find(text=re.compile(cost_string)):
             cost = item_inner.split()
             if not cost:
@@ -198,12 +221,17 @@ def get_concerts_from_tickets_od_ua(request):
                 full_cost = full_cost + "".join(cost)
         true_cost = " ".join(re.split('(\d+)', full_cost))
         link = host + parent.find("a").attrs["href"]
+        for item_inner in parent.find_all('span', class_='search-item-attr'):
+            time = item_inner.find('a').string
 
         full_info[count] = result
         result['name'] = name
+        result['current_place'] = current_place
         result['cost'] = true_cost
         result['link'] = link
+        result['time'] = time
+
     if bool(full_info):
-        return render(request, 'main/concerts.html', context={'full_info': full_info})
+        return render(request, 'main/theatre.html', context={'full_info': full_info})
     else:
-        return render(request, 'main/empty_page.html')
+        return render(request, 'main/empty_page.html', context={'place': data})

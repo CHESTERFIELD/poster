@@ -26,3 +26,5 @@ urlpatterns = [
 ]
 
 handler500 = 'poster.views.handler500'
+
+handler404 = 'poster.views.handler404'
