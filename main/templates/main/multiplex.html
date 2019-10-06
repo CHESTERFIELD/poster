@@ -16,12 +16,23 @@
         </h3>
         <div class="card-body">
             <h5 class="card-title">
-                {% for element in item.genre_time %}
+                {% for element in item.genre %}
                     {{ element }}
                 {% endfor %}
             </h5>
-            <p class="card-text">{{ item.link }}</p>
+            <p>{{ item.time }}</p>
             <a href="{{ item.link }}" target="_blank" class="btn btn-primary">Read</a>
+
+        </div>
+        <div class="multiplex-item-info">
+            <h3>Сеансы:</h3>
+            {% for element in item.schedule.values %}
+                <div class="block-schedule-item">
+                    <p> {{ element.time }} {{ element.tag }} {{ element.price }} </p>
+                </div>
+            {% empty %}
+            <p>На сегодня сеансов больше нет</p>
+            {% endfor %}
         </div>
         </div>
     {% endfor %}

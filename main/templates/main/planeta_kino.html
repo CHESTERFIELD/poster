@@ -9,16 +9,6 @@
 {% block content %}
 
     {% for item in full_info.values %}
-
-        <div class="card mb-4 border-success" id="cinema-card">
-        <h3 class="card-header">
-            {{ item.name }}
-        </h3>
-        <div class="card-body">
-            <h5 class="card-title"> {{ item.genre_time.0 }} </h5>
-            <p class="card-text">{{ item.link }}</p>
-            <a href="{{ item.link }}" target="_blank" class="btn btn-primary">Read</a>
-        </div>
-        </div>
+        {% include 'main/includes/cinema_template.html' %}
     {% endfor %}
 {% endblock %}

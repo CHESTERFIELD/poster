@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="poster">
+    <div class="card mb-4 border-success" id="cinema-card">
+        <h3 class="card-header name_item">
+            {{ item.name }}
+        </h3>
+        <div class="item-body">
+            <h5 class="card-title genre_item"> <b>Жанр:</b> {{ item.genre }} </h5>
+            <h5 class="card-title time_item"><b>Время:</b>  {{ item.time }} </h5>
+            <a href="{{ item.link }}" target="_blank" class="btn btn-primary item_link">Смотреть</a>
+        </div>
+        <div class="item-schedule">
+            {% for schedule_key,schedule_item in item.schedule.items %}
 
-</body>
-</html>
+                {% for schedule_info in schedule_item.values %}
+                    <p>{{ schedule_key }}</p>
+                    <p>{{ schedule_info.block_time }}</p>
+                    <p>{{ schedule_info.block_price }}</p>
+                {% empty %}
+                    <p>на сегодня фильмов больше нет.</p>
+                {% endfor %}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

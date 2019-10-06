@@ -7,18 +7,8 @@
 {% endblock %}
 
 {% block content %}
-
+        <h1 class="today_info">Фильмы на сегодня:</h1>
     {% for item in full_info.values %}
-
-        <div class="card mb-4 border-success" id="cinema-card">
-        <h3 class="card-header">
-            {{ item.name }}
-        </h3>
-        <div class="card-body">
-            <h5 class="card-title"> {{ item.genre_time.0 }} </h5>
-            <p class="card-text">{{ item.link }}</p>
-            <a href="{{ item.link }}" target="_blank" class="btn btn-primary">Смотреть</a>
-        </div>
-        </div>
+        {% include 'main/includes/cinema_template.html' %}
     {% endfor %}
 {% endblock %}
