@@ -40,6 +40,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_cron',
     'telegram_bot',
     'main',
     'django.contrib.admin',
@@ -48,6 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+CRON_CLASSES = [
+    "main.cron.MyCronJob",
 ]
 
 MIDDLEWARE = [
