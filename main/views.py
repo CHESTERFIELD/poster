@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 from requests import HTTPError
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.action_chains import ActionChains
 from DateTime import *
 
 
@@ -48,6 +49,9 @@ def get_cinemas_page(request):
 
 
 def get_cinema_city_page(request):
+    """
+    parse cinema item from cinema_city
+    """
     host = "https://cinemaciti.ua"
     url = "https://cinemaciti.ua/fontan-sky-center/rozklad"
     html = urlopen(url)
@@ -126,6 +130,9 @@ def get_cinema_city_page(request):
 
 
 def parse_genre_and_time_duration_planeta(link):
+    """
+    parse genre and time cinema item from planetakino
+    """
     # set_dd = list()
     hdr = {'User-Agent': 'Chrome/5.0'}
     req = Request(link, headers=hdr)
@@ -133,19 +140,13 @@ def parse_genre_and_time_duration_planeta(link):
 
     soup = BeautifulSoup(page.read(), "html.parser")
 
-    element = soup.find(text="Жанр").find_next("dd").text
+    element_genre = soup.find(text="Жанр").find_next("dd").text
+    element_time =  soup.find(text="Тривалість").find_next("dd").text
 
-    print(element)
+    print(element_genre)
+    print(element_time)
 
-
-    # for element in soup.find_all('span'):
-    #     element.extract()
-    # for genre in soup.find_all("dd")[3]:
-    #     set_dd.append(genre)
-    # for time in soup.find_all("dd")[9]:
-    #     set_dd.append(time)
-    # # print(set_dd)
-    # return set_dd
+    return element_genre, element_time
 
 
 def get_planeta_kino_page(request):
@@ -170,23 +171,71 @@ def get_planeta_kino_page(request):
                 name = child.string
                 count = count + 1
                 result['name'] = name
+                print(name)
             # link
             if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
                 link = host + child.attrs['href']
                 result['link'] = link
-                genre_time = parse_genre_and_time_duration_planeta(link)
-                result['genre_time'] = genre_time
-            full_info[count] = result.copy()
+                genre, time = parse_genre_and_time_duration_planeta(link)
+                # genre
+                result['genre'] = genre
+                # time
+                result['time'] = time
+            # schedule
+            schedule = dict()
+
+            for schedule_div in child.find_all("div", class_="tech t-mb-10-l"):
+
+                technology = schedule_div.find('span', class_="technology-title t-mb-7").string
+                print(technology)
+                # print(schedule_div)
+                block_info = dict()
+                number = 0
+
+                for info_block in schedule_div.find('div', class_='seances'):
+                    info = dict()
+                    number = number + 1
+                    # print(info_block)
+                    # print(dir(info_block))
+
+                    # element_to_hover_over = driver.find_elements_by_class_name("chips")
+                    # print(element_to_hover_over)
+                    # hover = ActionChains(driver).move_to_element(element_to_hover_over)
+                    # hover.perform()
+
+                for block in info_block.find_all("button", class_="chips"):
+                    if block.has_attr("disabled"):
+                        continue
+                    else:
+                        time = block.string
+                        info['block_time'] = time
+                        print(time)
+
+
+
+                        # info['block_price'] = schedule_block.string
+
+
+                    block_info[number] = info
+
+                schedule[technology] = block_info
+
+            result["schedule"] = schedule
+
+        full_info[count] = result.copy()
     if 0 in full_info:
         del full_info[0]
-            # # print(full_info)
+    print(full_info)
     b = datetime.datetime.now()
     c = b - a
-    print(int(c.total_seconds() * 1000))
+    print(int(c.total_seconds()))
     return render(request, 'main/cinema_city.html', context={'full_info': full_info})
 
 
 def get_min(string):
+    """
+    get minutes in format 'sec хв.' for def parse_genre_and_time_duration_multiplex
+    """
     h, m = string.split(":")
     minutes = str(int(h) * 60 + int(m)) + " хв."
     return minutes
@@ -250,7 +299,7 @@ def get_multiplex_page(request):
 
         full_info[count] = result
 
-    print(full_info)
+    # print(full_info)
     return render(request, 'main/multiplex.html', context={'full_info': full_info})
 
 
@@ -334,5 +383,3 @@ def get_data_from_tickets_od_ua(request, template, type, data):
         return render(request, template, context={'full_info': full_info})
     else:
         return render(request, 'main/empty_page.html', context={'place': data})
-
-
