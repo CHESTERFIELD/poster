@@ -143,8 +143,8 @@ def parse_genre_and_time_duration_planeta(link):
     element_genre = soup.find(text="Жанр").find_next("dd").text
     element_time =  soup.find(text="Тривалість").find_next("dd").text
 
-    print(element_genre)
-    print(element_time)
+    # print(element_genre)
+    # print(element_time)
 
     return element_genre, element_time
 
@@ -163,66 +163,61 @@ def get_planeta_kino_page(request):
     soup = BeautifulSoup(html, "html.parser")
     for element in soup.find('app-root'):
 
-        children = element.findChildren(recursive=True)
-        # print(element)
-        for child in children:
-            # name
-            if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
-                name = child.string
-                count = count + 1
-                result['name'] = name
-                print(name)
-            # link
-            if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
-                link = host + child.attrs['href']
-                result['link'] = link
-                genre, time = parse_genre_and_time_duration_planeta(link)
-                # genre
-                result['genre'] = genre
-                # time
-                result['time'] = time
-            # schedule
-            schedule = dict()
+        for child_element in element.findAll('div', class_="movie"):
 
-            for schedule_div in child.find_all("div", class_="tech t-mb-10-l"):
+            for child in child_element.findAll('a'):
 
-                technology = schedule_div.find('span', class_="technology-title t-mb-7").string
-                print(technology)
-                # print(schedule_div)
-                block_info = dict()
-                number = 0
+                if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
+                    # name
+                    name = child.string
+                    count = count + 1
+                    result['name'] = name
+                    print(name)
+                    # link
+                    link = host + child.attrs['href']
+                    result['link'] = link
+                    genre, time = parse_genre_and_time_duration_planeta(link)
+                    # genre
+                    result['genre'] = genre
+                    # time
+                    result['time'] = time
 
-                for info_block in schedule_div.find('div', class_='seances'):
-                    info = dict()
-                    number = number + 1
-                    # print(info_block)
-                    # print(dir(info_block))
+                # schedule
+                schedule = dict()
 
-                    # element_to_hover_over = driver.find_elements_by_class_name("chips")
-                    # print(element_to_hover_over)
-                    # hover = ActionChains(driver).move_to_element(element_to_hover_over)
-                    # hover.perform()
+                for schedule_div in child_element.find_all("div", class_="tech t-mb-10-l"):
 
-                for block in info_block.find_all("button", class_="chips"):
-                    if block.has_attr("disabled"):
-                        continue
-                    else:
-                        time = block.string
-                        info['block_time'] = time
-                        print(time)
+                    technology = schedule_div.find('span', class_="technology-title t-mb-7").string
+                    # print(schedule_div)
+                    block_info = dict()
+                    number = 0
 
+                    for info_block in schedule_div.find_all('button', class_='chips'):
+                        info = dict()
+                        # print(info_block)
+                        # print(dir(info_block))
 
+                        if info_block.has_attr("disabled"):
+                            continue
+                        else:
+                            number = number + 1
+                            time = info_block.string
+                            info['block_time'] = time
 
-                        # info['block_price'] = schedule_block.string
+                            element_to_hover_over = driver.find_elements_by_class_name("chips")
+                            print(element_to_hover_over)
+                            # hover = ActionChains(driver).move_to_element(element_to_hover_over)
+                            # hover.perform()
 
+                            # info['block_price'] = schedule_block.string
 
-                    block_info[number] = info
+                        block_info[number] = info
 
-                schedule[technology] = block_info
+                    schedule[technology] = block_info
 
-            result["schedule"] = schedule
+                result["schedule"] = schedule
 
-        full_info[count] = result.copy()
+            full_info[count] = result.copy()
     if 0 in full_info:
         del full_info[0]
     print(full_info)

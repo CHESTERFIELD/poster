@@ -16,6 +16,7 @@
                     <p>{{ schedule_info.block_time }}</p>
                     <p>{{ schedule_info.block_price }}</p>
                 {% empty %}
+                    <p>{{ schedule_key }}</p>
                     <p>на сегодня фильмов больше нет.</p>
                 {% endfor %}
             {% endfor %}
