@@ -156,10 +156,11 @@ def get_planeta_kino_page(request):
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get(url)
     html = driver.page_source
-    driver.close()
+    # driver.close()
     full_info = dict()
     result = dict()
     count = 0
+    app_timetable_movie = 0
     soup = BeautifulSoup(html, "html.parser")
     for element in soup.find('app-root'):
 
@@ -171,6 +172,7 @@ def get_planeta_kino_page(request):
                     # name
                     name = child.string
                     count = count + 1
+                    app_timetable_movie += 1
                     result['name'] = name
                     print(name)
                     # link
@@ -184,16 +186,18 @@ def get_planeta_kino_page(request):
 
                 # schedule
                 schedule = dict()
-
+                div = 1
                 for schedule_div in child_element.find_all("div", class_="tech t-mb-10-l"):
-
+                    div += 1
                     technology = schedule_div.find('span', class_="technology-title t-mb-7").string
                     # print(schedule_div)
                     block_info = dict()
                     number = 0
+                    app_seance_chips = 0
 
                     for info_block in schedule_div.find_all('button', class_='chips'):
                         info = dict()
+                        app_seance_chips += 1
                         # print(info_block)
                         # print(dir(info_block))
 
@@ -204,14 +208,21 @@ def get_planeta_kino_page(request):
                             time = info_block.string
                             info['block_time'] = time
 
-                            element_to_hover_over = driver.find_elements_by_class_name("chips")
-                            print(element_to_hover_over)
-                            # hover = ActionChains(driver).move_to_element(element_to_hover_over)
-                            # hover.perform()
+                            xpath = "/html/body/div[1]/div/app-root/app-general-timetable/section/section[2]/app-timetable-movie[{0}]/div/section/div/div[{1}]/div/app-seance-chips[{2}]/button".format(app_timetable_movie, div, app_seance_chips)
+                            element_to_hover_over = driver.find_element_by_xpath(xpath)
+                            # print(element_to_hover_over)
+                            hover = ActionChains(driver).move_to_element(element_to_hover_over)
+                            hover.perform()
 
-                            # info['block_price'] = schedule_block.string
+                            # driver.get(url)
+                            # html = driver.page_source
+                            # soup = BeautifulSoup(html, "html.parser")
+                            # for chips-box in child_element.find(div)
+
+                            info['block_price'] = schedule_block.string
 
                         block_info[number] = info
+
 
                     schedule[technology] = block_info
 
