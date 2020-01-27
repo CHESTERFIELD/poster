@@ -156,7 +156,6 @@ def get_planeta_kino_page(request):
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get(url)
     html = driver.page_source
-    # driver.close()
     full_info = dict()
     result = dict()
     count = 0
@@ -165,8 +164,8 @@ def get_planeta_kino_page(request):
     for element in soup.find('app-root'):
 
         for child_element in element.findAll('div', class_="movie"):
-
-            for child in child_element.findAll('a'):
+            # print(child_element)
+            for child in child_element.findAll('a', class_='tablet-movie-name'):
 
                 if child.name == "a" and 'class' in child.attrs and child.attrs['class'][0] == 'tablet-movie-name':
                     # name
@@ -202,27 +201,37 @@ def get_planeta_kino_page(request):
                         # print(dir(info_block))
 
                         if info_block.has_attr("disabled"):
-                            continue
+                            pass
                         else:
                             number = number + 1
                             time = info_block.string
                             info['block_time'] = time
-
+                            print(time)
                             xpath = "/html/body/div[1]/div/app-root/app-general-timetable/section/section[2]/app-timetable-movie[{0}]/div/section/div/div[{1}]/div/app-seance-chips[{2}]/button".format(app_timetable_movie, div, app_seance_chips)
                             element_to_hover_over = driver.find_element_by_xpath(xpath)
-                            # print(element_to_hover_over)
                             hover = ActionChains(driver).move_to_element(element_to_hover_over)
                             hover.perform()
 
-                            # driver.get(url)
-                            # html = driver.page_source
-                            # soup = BeautifulSoup(html, "html.parser")
-                            # for chips-box in child_element.find(div)
+                            htmll = driver.page_source
+                            soupp = BeautifulSoup(htmll, "html.parser")
 
-                            info['block_price'] = schedule_block.string
+                            price_list = list()
+
+                            try:
+                                for chips_box in soupp.find_all('div', class_='cash'):
+                                    print(chips_box)
+                                    price_list.append(int(str(chips_box.string).split(" ")[0]))
+                            except TypeError:
+                                pass
+
+                            print(price_list)
+                            try:
+                                price = "от {0} до {1} грн.".format(min(price_list), max(price_list))
+                            except ValueError:
+                                price = ""
+                            info['block_price'] = price
 
                         block_info[number] = info
-
 
                     schedule[technology] = block_info
 
@@ -235,6 +244,7 @@ def get_planeta_kino_page(request):
     b = datetime.datetime.now()
     c = b - a
     print(int(c.total_seconds()))
+    driver.close()
     return render(request, 'main/cinema_city.html', context={'full_info': full_info})
 
 
